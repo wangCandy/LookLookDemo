@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_zhihu"
+            android:icon="@mipmap/zhihu"
+            android:checked="true"
+            android:title="@string/nav_zhihu" />
+        <item
+            android:id="@+id/nav_wangyi"
+            android:icon="@mipmap/wangyi"
+            android:checkable="true"
+            android:title="@string/nav_wangyi" />
+        <item
+            android:id="@+id/nav_Look"
+            android:icon="@mipmap/look2"
+            android:checkable="true"
+            android:title="@string/nav_look" />
+    </group>
+
+</menu>

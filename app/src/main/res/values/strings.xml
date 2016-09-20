@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Demo</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="action_webview">WebView</string>
+    <string name="action_inter">用浏览器打开</string>
+
+    <string name="nav_zhihu">知乎日报</string>
+    <string name="nav_wangyi">网易新闻</string>
+    <string name="nav_look">每天看看</string>
+
+    <string name="no_network">暂无网络</string>
+    <string name="reload">重新加载</string>
+</resources>

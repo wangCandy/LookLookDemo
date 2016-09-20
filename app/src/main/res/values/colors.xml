@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="app_red_dark">#ff6f6f</color>
+
+    <color name="app_red">#fe564c</color>
+    <color name="app_red_light">#66fe564c</color>
+
+    <color name="app_main_bg">#f1f1f1</color>
+
+    <color name="news_title">#333333</color>
+    <color name="news_digest">#666666</color>
+    <color name="news_time">#999999</color>
+
+    <!--87%white-->
+    <color name="primary_text">#de000000</color>
+
+
+    <color name="alpha_10_black">#1A000000</color>
+    <color name="alpha_15_black">#26000000</color>
+    <color name="alpha_20_black">#33000000</color>
+</resources>
