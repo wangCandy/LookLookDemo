@@ -1,11 +1,15 @@
 package com.wly.looklookdemo.fragment;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
@@ -13,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.wly.looklookdemo.R;
 import com.wly.looklookdemo.TopNews.TopNewsListAdapter;
+import com.wly.looklookdemo.TopNews.TopPhotoDetailActivity;
 import com.wly.looklookdemo.TopNews.presenter.TopNewsPresenter;
 import com.wly.looklookdemo.TopNews.presenter.TopNewsPresenterImpl;
 import com.wly.looklookdemo.TopNews.view.TopNewsView;
@@ -41,6 +46,14 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     public ViewStub viewStub;
 
+    public LinearLayoutManager mLinearLayoutManager;
+
+    public RecyclerView.OnScrollListener loadingMoreListener;
+
+    public boolean loading;
+
+    public int num = 0;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_wangyi;
@@ -52,14 +65,17 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         swipeLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swipe);
         mTopNewsLayout = (RecyclerView) convertView.findViewById(R.id.recycler_top_news_item);
         progress = (ProgressBar) convertView.findViewById(R.id.progress);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
         initRecycler();
         initSwipe();
     }
 
     public void initRecycler(){
 
-        mTopNewsLayout.setLayoutManager(new LinearLayoutManager(getActivity()));
+        initialListener();
+        mTopNewsLayout.setLayoutManager(mLinearLayoutManager);
         mTopNewsLayout.setItemAnimator(new DefaultItemAnimator());
+//        mTopNewsLayout.setOnScrollListener(loadingMoreListener);
     }
 
     public void initSwipe(){
@@ -80,7 +96,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     protected void initialize() {
 
         if(viewStub == null){
-
             viewStub.inflate();
         }
 
@@ -90,7 +105,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             presenter = new TopNewsPresenterImpl(getActivity() , this);
             presenter.loadTopNewsList(Urls.ENTERTAINMENT_ID);
 
-        }else{
+        }else {
             viewStub.setVisibility(View.VISIBLE);
             Button reload = (Button) convertView.findViewById(R.id.reload);
             reload.setOnClickListener(new View.OnClickListener() {
@@ -101,9 +116,41 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         }
     }
 
+    private void initialListener() {
+
+        loadingMoreListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) //向下滚动
+                {
+                    int visibleItemCount = mLinearLayoutManager.getChildCount();
+                    int totalItemCount = mLinearLayoutManager.getItemCount();
+                    int pastVisiblesItems = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+                    if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                        loading = true;
+                        loadMore();
+                    }
+                }
+            }
+        };
+
+    }
+
+    public void loadMore(){
+        topAdapter.loadingStart();
+        num += 20;
+        presenter.loadMoreNewList(Urls.ENTERTAINMENT_ID , num);
+    }
+
     @Override
     public void onRefresh() {
-
         initialize();
     }
 
@@ -131,18 +178,19 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void addTopNewsList(final List<TopNewsBean> been) {
 
-        topAdapter = new TopNewsListAdapter(getActivity() , been);
+        topAdapter = new TopNewsListAdapter(getActivity());
+        topAdapter.addItems(been);
         mTopNewsLayout.setAdapter(topAdapter);
         topAdapter.setItemListener(new TopNewsListAdapter.onTopNewsClickListener() {
             @Override
             public void onItemClicked(View view, int position, boolean isPhoto) {
                 TopNewsBean bean = been.get(position);
                 if(isPhoto){
-                    //图片新闻
-
-
-
-
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("news_detail" , bean);
+                    Intent intent = new Intent(mContext , TopPhotoDetailActivity.class);
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
                 }else{
                     Bundle bundle = new Bundle();
                     bundle.putString("News_ID" , String.valueOf(bean.getPostid()));

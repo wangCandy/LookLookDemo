@@ -31,7 +31,13 @@ public class TopNewsPresenterImpl implements TopNewsPresenter , TopNewsModelImpl
     public void loadTopNewsList(String id) {
 
         myView.showProgress();
-        model.loadTopNewsList(mContext , id , this);
+        model.loadTopNewsList(mContext , id , 0 , this);
+    }
+
+    @Override
+    public void loadMoreNewList(String id , int num) {
+
+        model.loadTopNewsList(mContext , id  , num , this);
     }
 
     @Override

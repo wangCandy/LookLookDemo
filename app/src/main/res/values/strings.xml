@@ -15,4 +15,8 @@
 
     <string name="no_network">暂无网络</string>
     <string name="reload">重新加载</string>
+
+    <string name="refresh">正在刷新</string>
+
+    <string name="photo_detail_title">%1$d/%2$d　%3$s</string>
 </resources>

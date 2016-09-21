@@ -23,13 +23,14 @@ public class TopNewsModelImpl implements TopNewsModel {
     public static final String TAG = TopNewsModelImpl.class.getSimpleName();
 
     @Override
-    public void loadTopNewsList(Context context , final String id, final onTopNewsListListener listener) {
+    public void loadTopNewsList(Context context, final String id, int num, final onTopNewsListListener listener) {
 
         if(!NetWorkCheckUtil.isNetWorkConnected(context)){
             listener.onFailure("暂无网络" , null);
         }else{
 
-            String url = Urls.NEWS_DETAIL + id + "/" + "0" + Urls.END_URL;
+            String url = Urls.NEWS_DETAIL + id + "/" + num + Urls.END_URL;
+            Log.d(TAG, "loadTopNewsList: url" + url);
 
             final List<TopNewsBean> topNewsBeans = new ArrayList<TopNewsBean>();
             Ion.with(context).load(Urls.METHOD , url)
@@ -52,6 +53,7 @@ public class TopNewsModelImpl implements TopNewsModel {
 
         }
     }
+
 
     public interface onTopNewsListListener{
 

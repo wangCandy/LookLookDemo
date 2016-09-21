@@ -7,5 +7,5 @@ import android.content.Context;
  */
 public interface TopNewsModel {
 
-    void loadTopNewsList(Context context , String id , TopNewsModelImpl.onTopNewsListListener listener);
+    void loadTopNewsList(Context context , String id , int num , TopNewsModelImpl.onTopNewsListListener listener);
 }

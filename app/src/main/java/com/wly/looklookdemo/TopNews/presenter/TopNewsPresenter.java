@@ -6,4 +6,6 @@ package com.wly.looklookdemo.TopNews.presenter;
 public interface TopNewsPresenter {
 
     void loadTopNewsList(String id);
+
+    void loadMoreNewList(String id , int num);
 }

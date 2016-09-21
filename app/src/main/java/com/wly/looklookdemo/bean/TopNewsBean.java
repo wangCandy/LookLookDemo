@@ -1,11 +1,12 @@
 package com.wly.looklookdemo.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Candy on 2016/9/8.
  */
-public class TopNewsBean {
+public class TopNewsBean implements Serializable{
 
 
     private String postid;
@@ -282,7 +283,7 @@ public class TopNewsBean {
         this.imgextra = imgextra;
     }
 
-    public static class AdsBean {
+    public static class AdsBean  implements Serializable{
         private String title;
         private String tag;
         private String imgsrc;
@@ -330,7 +331,7 @@ public class TopNewsBean {
         }
     }
 
-    public static class ImgextraBean {
+    public static class ImgextraBean implements Serializable{
         private String imgsrc;
 
         public String getImgsrc() {

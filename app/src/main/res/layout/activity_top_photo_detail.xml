@@ -3,19 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.wly.looklookdemo.TopNews.TopPhotoDetailActivity">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:title="图片新闻"
+        android:theme="@style/AppTheme.AppBarOverlay"
         android:background="@color/colorPrimary"
         android:id="@+id/toolbar"
         android:fitsSystemWindows="false">
     </android.support.v7.widget.Toolbar>
 
-    <ImageView
+    <com.wly.looklookdemo.widget.PhotoViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar" />
+        android:id="@+id/photo_view_pager"
+        android:layout_below="@+id/toolbar"
+        android:background="#ff000000">
+    </com.wly.looklookdemo.widget.PhotoViewPager>
 
+    <TextView
+        android:id="@+id/photo_detail_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:padding="@dimen/dp_8"
+        android:textColor="#deffffff"
+        android:textSize="@dimen/sp_18"
+        tools:text="1/5  武汉奢华别墅区被洪水围困成孤岛"/>
 </RelativeLayout>

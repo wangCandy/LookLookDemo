@@ -21,11 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".news.NewsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TopNews.TopPhotoDetailActivity">
-        </activity>
+
+
+        <activity
+            android:name=".TopNews.TopPhotoDetailActivity"
+            ></activity>
     </application>
 
 </manifest>

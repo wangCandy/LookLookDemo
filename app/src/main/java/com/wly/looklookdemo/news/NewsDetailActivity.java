@@ -72,19 +72,6 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailV
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        WebSettings settings = wvDetail.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        settings.setLoadWithOverviewMode(true);
-        settings.setBuiltInZoomControls(true);
-        //settings.setUseWideViewPort(true);造成文字太小
-        settings.setDomStorageEnabled(true);
-        settings.setDatabaseEnabled(true);
-        settings.setAppCachePath(getCacheDir().getAbsolutePath() + "/webViewCache");
-        settings.setAppCacheEnabled(true);
-        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        wvDetail.setWebChromeClient(new WebChromeClient());
-
         initData();
     }
     public void initData(){
