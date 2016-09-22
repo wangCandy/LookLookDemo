@@ -5,18 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/swipe">
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recycler_top_news_item">
-        </android.support.v7.widget.RecyclerView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:id="@+id/recycler_top_news_item">
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
     <ViewStub
         android:layout_width="match_parent"

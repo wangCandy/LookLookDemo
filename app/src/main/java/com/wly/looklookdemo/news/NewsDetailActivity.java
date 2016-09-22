@@ -27,8 +27,6 @@ import com.wly.looklookdemo.news.view.NewsDetailView;
 import com.wly.looklookdemo.utils.ImageUtils;
 import com.wly.looklookdemo.utils.WebUtil;
 
-import org.sufficientlysecure.htmltextview.HtmlTextView;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

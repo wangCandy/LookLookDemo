@@ -1,49 +1,76 @@
 package com.wly.looklookdemo.fragment;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.wly.looklookdemo.R;
+import com.wly.looklookdemo.api.ApiHandler;
+import com.wly.looklookdemo.api.LookAppApiClient;
 import com.wly.looklookdemo.base.BaseFragment;
 import com.wly.looklookdemo.bean.NewsBean;
+import com.wly.looklookdemo.news.NewsJsonUtils;
 import com.wly.looklookdemo.news.NewsListAdapter;
-import com.wly.looklookdemo.news.view.NewsView;
-import com.wly.looklookdemo.news.presenter.NewsPresenter;
-import com.wly.looklookdemo.news.presenter.NewsPresenterImpl;
 import com.wly.looklookdemo.utils.NetWorkCheckUtil;
+import com.wly.looklookdemo.utils.Urls;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Candy on 2016/9/2.
  */
-public class ZhihuFragment extends BaseFragment implements NewsView , SwipeRefreshLayout.OnRefreshListener{
+public class ZhihuFragment extends BaseFragment implements XRecyclerView.LoadingListener{
 
     public static final String TAG = ZhihuFragment.class.getSimpleName();
-
-    public NewsPresenter presenter;
 
     public NewsListAdapter adapter;
 
     public Context mContext;
 
-    public RecyclerView newsRecycler;
+    public XRecyclerView newsRecycler;
 
-    public ProgressBar progress;
-
-    public SwipeRefreshLayout swipeLayout;
+    public String url;
 
     public ViewStub viewStub;
 
+    public int date;
 
+    public List<NewsBean> newsItems = new ArrayList<NewsBean>();
+
+    public Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            List<NewsBean> items = (ArrayList<NewsBean>) msg.obj;
+            switch (msg.arg1){
+                case 0:
+                    newsItems.clear();
+                    newsItems.addAll(items);
+                    break;
+                case 1:
+                    newsItems.addAll(0 , items);
+                    newsRecycler.reset();
+                    break;
+                case 2:
+                    newsItems.addAll(items);
+                    newsRecycler.reset();
+                    break;
+            }
+            adapter.notifyDataSetChanged();
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -52,29 +79,24 @@ public class ZhihuFragment extends BaseFragment implements NewsView , SwipeRefre
 
     @Override
     protected void findView() {
-
         mContext = getActivity();
-        newsRecycler = (RecyclerView) convertView.findViewById(R.id.recycler_news_item);
-        progress = (ProgressBar) convertView.findViewById(R.id.progress);
-        swipeLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swipe);
+        newsRecycler = (XRecyclerView) convertView.findViewById(R.id.recycler_news_item);
         viewStub = (ViewStub) convertView.findViewById(R.id.viewsub);
-        initRecycler();
-        initSwipe();
     }
 
     public void initRecycler(){
 
-        newsRecycler.setLayoutManager(new LinearLayoutManager(mContext));
+        LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        newsRecycler.setLayoutManager(manager);
+        newsRecycler.setRefreshProgressStyle(ProgressStyle.BallBeat);
+        newsRecycler.setLoadingMoreProgressStyle(ProgressStyle.BallBeat);
+        newsRecycler.setArrowImageView(R.mipmap.iconfont_downgrey);
         newsRecycler.setItemAnimator(new DefaultItemAnimator());
-    }
-
-    public void initSwipe(){
-
-        swipeLayout.setColorSchemeResources(R.color.colorAccent ,
-                R.color.app_red ,
-                R.color.app_red_dark ,
-                R.color.app_red_light);
-        swipeLayout.setOnRefreshListener(this);
+        adapter = new NewsListAdapter(mContext , newsItems);
+        newsRecycler.setAdapter(adapter);
+        newsRecycler.setLoadingListener(this);
+        newsRecycler.setRefreshing(true);
     }
 
     @Override
@@ -89,11 +111,9 @@ public class ZhihuFragment extends BaseFragment implements NewsView , SwipeRefre
             viewStub.inflate();
         }
         if(NetWorkCheckUtil.isNetWorkConnected(getContext())){
-
             viewStub.setVisibility(View.GONE);
-            presenter = new NewsPresenterImpl(getActivity() , this);
-            presenter.loadNewsList();
-
+            newsRecycler.setVisibility(View.VISIBLE);
+            initRecycler();
         }else{
             viewStub.setVisibility(View.VISIBLE);
             Button reload = (Button) convertView.findViewById(R.id.reload);
@@ -106,40 +126,42 @@ public class ZhihuFragment extends BaseFragment implements NewsView , SwipeRefre
         }
     }
 
-    @Override
-    public void addData(List<NewsBean> beans) {
+    public void initData(String url , final int upOrDown){
+        LookAppApiClient.sendRequest(false, mContext, url, new ApiHandler() {
+            @Override
+            public void onSuccess(String jsonResult) {
 
-        adapter = new NewsListAdapter(getActivity() , beans);
-        newsRecycler.setAdapter(adapter);
-    }
+                try {
+                    JSONObject object = new JSONObject(jsonResult);
+                    date = Integer.parseInt(object.getString("date"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                List<NewsBean> newsList = NewsJsonUtils.readNewsListBean(jsonResult);
+                Message msg = mHandler.obtainMessage();
+                msg.arg1 = upOrDown;
+                msg.obj = newsList;
+                mHandler.sendMessage(msg);
+            }
 
-    @Override
-    public void showProgress() {
+            @Override
+            public void onFailure(String errorMsg) {
 
-        if (swipeLayout.isRefreshing()){
-
-            progress.setVisibility(View.GONE);
-        }else{
-            progress.setVisibility(View.VISIBLE);
-        }
-
-    }
-
-    @Override
-    public void hideProgress() {
-
-        swipeLayout.setRefreshing(false);
-        progress.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onShowFailMsg() {
-
-        Log.d(TAG, "onShowFailMsg");
+            }
+        });
     }
 
     @Override
     public void onRefresh() {
-        initialize();
+        url = Urls.LATEST;
+        initData(url , 0);
+        newsRecycler.refreshComplete();
+    }
+
+    @Override
+    public void onLoadMore() {
+        url = Urls.BEFORE + date;
+        initData(url , 2);
+        newsRecycler.loadMoreComplete();
     }
 }

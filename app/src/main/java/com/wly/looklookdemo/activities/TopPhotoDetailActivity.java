@@ -1,17 +1,17 @@
-package com.wly.looklookdemo.TopNews;
+package com.wly.looklookdemo.activities;
 
+import android.media.Image;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wly.looklookdemo.R;
+import com.wly.looklookdemo.adapter.TopPhotoDetailAdapter;
 import com.wly.looklookdemo.bean.TopNewsBean;
 import com.wly.looklookdemo.utils.ImageUtils;
 import com.wly.looklookdemo.widget.PhotoViewPager;
@@ -53,17 +53,31 @@ public class TopPhotoDetailActivity extends AppCompatActivity {
     }
 
     public void init(){
-        if(photoBean == null){
-            photoBean = (TopNewsBean) getIntent().getExtras().getSerializable("news_detail");
+
+        int type = getIntent().getExtras().getInt("News_type");
+        switch (type){
+            case 0:
+                if(photoBean == null){
+                    photoBean = (TopNewsBean) getIntent().getExtras().getSerializable("news_detail");
+                }
+                initData();
+                setPhotoTitle(0);
+                break;
+            case 1:
+                imageData = new ArrayList<ImageView>();
+                String url = getIntent().getExtras().getString("Image_url");
+                ImageView image = new ImageView(this);
+                ImageUtils.loadImage(this , url , image);
+                imageData.add(image);
+                initViewPager();
+                getSupportActionBar().setTitle("妹纸");
+                break;
         }
-        initData();
-        setPhotoTitle(0);
     }
 
     public void initData(){
 
         imageData = new ArrayList<ImageView>();
-
         if(photoBean.getAds() != null){
 
             for(TopNewsBean.AdsBean bean : photoBean.getAds()){

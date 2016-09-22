@@ -1,4 +1,4 @@
-package com.wly.looklookdemo.TopNews;
+package com.wly.looklookdemo.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

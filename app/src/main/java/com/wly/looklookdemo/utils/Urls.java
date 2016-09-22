@@ -11,6 +11,8 @@ public class Urls {
 
     public static final String LATEST = ZHIHU_BASE + "latest";
 
+    public static final String BEFORE = ZHIHU_BASE + "before/";
+
     public static final String NETEAST_HOST = "http://c.m.163.com/nc/article/";
     public static final String END_URL = "-20.html";
     public static final String ENDDETAIL_URL = "/full.html";
@@ -27,6 +29,8 @@ public class Urls {
 
     // 娱乐
     public static final String ENTERTAINMENT_ID = "T1348648517839";
+
+    public static final String IMAGE_BASE = "http://gank.io//api/data/福利/10/";
 
     public static final int TIME_OUT = 10 * 1000;
 }
