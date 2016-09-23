@@ -3,15 +3,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_zhihu"
-            android:icon="@mipmap/zhihu"
-            android:checked="true"
-            android:title="@string/nav_zhihu" />
-        <item
             android:id="@+id/nav_wangyi"
             android:icon="@mipmap/wangyi"
-            android:checkable="true"
+            android:checked="true"
             android:title="@string/nav_wangyi" />
+
+        <item
+            android:id="@+id/nav_zhihu"
+            android:icon="@mipmap/zhihu"
+            android:checkable="true"
+            android:title="@string/nav_zhihu" />
+
         <item
             android:id="@+id/nav_Look"
             android:icon="@mipmap/look2"

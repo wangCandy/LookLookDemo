@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNavigation.setNavigationItemSelectedListener(this);
         manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.main_contain , new ZhihuFragment()).commitAllowingStateLoss();
+        manager.beginTransaction().replace(R.id.main_contain , new NewsFragment()).commitAllowingStateLoss();
     }
 
     @Override
