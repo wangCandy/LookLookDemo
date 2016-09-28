@@ -15,6 +15,7 @@ import android.widget.Button;
 import com.wly.looklookdemo.R;
 import com.wly.looklookdemo.utils.NetWorkCheckUtil;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -44,7 +45,7 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+//        ButterKnife.bind(this , convertView);
         findView();
         setListener();
         initialize();
@@ -57,4 +58,11 @@ public abstract class BaseFragment extends Fragment{
     protected abstract void setListener();
 
     protected abstract void initialize();
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: BaseFragment");
+        ButterKnife.unbind(this);
+    }
 }

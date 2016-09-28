@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jcodecraeer.xrecyclerview.adapter.SlideInRightAnimatorAdapter;
+import com.jcodecraeer.xrecyclerview.adapter.SwingBottomInAnimationAdapter;
 import com.wly.looklookdemo.R;
 import com.wly.looklookdemo.activities.TopPhotoDetailActivity;
 import com.wly.looklookdemo.adapter.TopNewsListAdapter;
@@ -33,17 +35,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Candy on 2016/9/23.
  */
 public class NewsPagerFragment extends BaseFragment implements XRecyclerView.LoadingListener{
 
+    @Bind(R.id.recycler_top_news_item)
     public XRecyclerView mTopNewsLayout;
-
-    public ProgressBar progress;
 
     public TopNewsListAdapter topAdapter;
 
+    @Bind(R.id.viewsub)
     public ViewStub viewStub;
 
     public LinearLayoutManager mLinearLayoutManager;
@@ -94,9 +99,7 @@ public class NewsPagerFragment extends BaseFragment implements XRecyclerView.Loa
 
     @Override
     protected void findView() {
-        viewStub = (ViewStub) convertView.findViewById(R.id.viewsub);
-        mTopNewsLayout = (XRecyclerView) convertView.findViewById(R.id.recycler_top_news_item);
-        progress = (ProgressBar) convertView.findViewById(R.id.progress);
+        ButterKnife.bind(this , convertView);
     }
 
     public void initRecycler(){
@@ -106,7 +109,8 @@ public class NewsPagerFragment extends BaseFragment implements XRecyclerView.Loa
         mTopNewsLayout.setRefreshProgressStyle(ProgressStyle.LineScale);
         mTopNewsLayout.setItemAnimator(new DefaultItemAnimator());
         topAdapter = new TopNewsListAdapter(getActivity() , topNewsBeen);
-        mTopNewsLayout.setAdapter(topAdapter);
+        SlideInRightAnimatorAdapter animationAdapter = new SlideInRightAnimatorAdapter(topAdapter , mTopNewsLayout);
+        mTopNewsLayout.setAdapter(animationAdapter);
         mTopNewsLayout.setRefreshing(true);
         mTopNewsLayout.setLoadingListener(this);
         topAdapter.setItemListener(new TopNewsListAdapter.onTopNewsClickListener() {

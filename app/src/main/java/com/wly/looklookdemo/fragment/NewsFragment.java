@@ -1,49 +1,31 @@
 package com.wly.looklookdemo.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewStub;
-import android.widget.Button;
-import android.widget.ProgressBar;
+import android.view.ViewGroup;
 
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.wly.looklookdemo.R;
 import com.wly.looklookdemo.adapter.TabFragmentAdapter;
-import com.wly.looklookdemo.adapter.TopNewsListAdapter;
-import com.wly.looklookdemo.activities.TopPhotoDetailActivity;
-import com.wly.looklookdemo.api.ApiHandler;
-import com.wly.looklookdemo.api.LookAppApiClient;
 import com.wly.looklookdemo.base.BaseFragment;
-import com.wly.looklookdemo.bean.TopNewsBean;
-import com.wly.looklookdemo.news.NewsDetailActivity;
-import com.wly.looklookdemo.utils.JsonUtils;
-import com.wly.looklookdemo.utils.NetWorkCheckUtil;
-import com.wly.looklookdemo.utils.Urls;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Candy on 2016/9/2.
  */
-public class NewsFragment extends BaseFragment{
+public class NewsFragment extends BaseFragment {
 
-    public TabLayout mTab;
+    public static final String TAG = NewsFragment.class.getSimpleName();
 
-    public ViewPager mPager;
+    @Bind(R.id.tabs)
+    TabLayout mTab;
+    @Bind(R.id.viewpager)
+    ViewPager mPager;
 
     @Override
     protected int getLayoutId() {
@@ -52,10 +34,11 @@ public class NewsFragment extends BaseFragment{
 
     @Override
     protected void findView() {
-
-        mTab = (TabLayout) convertView.findViewById(R.id.tabs);
-        mPager = (ViewPager) convertView.findViewById(R.id.viewpager);
+        ButterKnife.bind(this , convertView);
+//        mTab = (TabLayout) convertView.findViewById(R.id.tabs);
+//        mPager = (ViewPager) convertView.findViewById(R.id.viewpager);
     }
+
     @Override
     protected void setListener() {
     }
@@ -64,8 +47,14 @@ public class NewsFragment extends BaseFragment{
     protected void initialize() {
 
         TabFragmentAdapter adapter = new TabFragmentAdapter(getFragmentManager());
-        mPager.setOffscreenPageLimit(2);
         mPager.setAdapter(adapter);
         mTab.setupWithViewPager(mPager);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: BaseFragment");
+        ButterKnife.unbind(this);
     }
 }

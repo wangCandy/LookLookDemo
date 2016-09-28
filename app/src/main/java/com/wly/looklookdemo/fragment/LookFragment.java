@@ -2,6 +2,7 @@ package com.wly.looklookdemo.fragment;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
@@ -27,19 +28,25 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Candy on 2016/9/2.
  */
 public class LookFragment extends BaseFragment implements XRecyclerView.LoadingListener{
 
+    @Bind(R.id.look_item)
     public XRecyclerView mLookNewsLayout;
 
     public LookImageAdapter mAdapter;
 
     public List<ImageBean> imageBeen = new ArrayList<ImageBean>();
 
+    @Bind(R.id.viewsub)
     public ViewStub viewStub;
 
+    @Bind(R.id.reload)
     public Button reload;
 
     public int id = 1;
@@ -78,9 +85,9 @@ public class LookFragment extends BaseFragment implements XRecyclerView.LoadingL
     @Override
     protected void findView() {
 
+        mLookNewsLayout = (XRecyclerView) convertView.findViewById(R.id.look_item);
         viewStub = (ViewStub) convertView.findViewById(R.id.viewsub);
         reload = (Button) convertView.findViewById(R.id.reload);
-        mLookNewsLayout = (XRecyclerView) convertView.findViewById(R.id.look_item);
     }
 
     @Override
@@ -142,10 +149,11 @@ public class LookFragment extends BaseFragment implements XRecyclerView.LoadingL
 
     public void initRecycler(){
 
-        mLookNewsLayout.setLayoutManager(new LinearLayoutManager(mContext));
+        mLookNewsLayout.setLayoutManager(new StaggeredGridLayoutManager(2 , StaggeredGridLayoutManager.VERTICAL));
         mLookNewsLayout.setRefreshProgressStyle(ProgressStyle.BallScale);
         mLookNewsLayout.setLoadingMoreProgressStyle(ProgressStyle.BallBeat);
         mLookNewsLayout.setArrowImageView(R.mipmap.iconfont_downgrey);
+        mLookNewsLayout.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new LookImageAdapter(imageBeen , mContext);
         mLookNewsLayout.setAdapter(mAdapter);
         mLookNewsLayout.setLoadingListener(this);

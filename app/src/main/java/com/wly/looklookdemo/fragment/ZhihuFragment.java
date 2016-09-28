@@ -11,6 +11,8 @@ import android.widget.Button;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jcodecraeer.xrecyclerview.adapter.SlideInBottomAnimatorAdapter;
+import com.jcodecraeer.xrecyclerview.adapter.SlideInLeftAnimatorAdapter;
 import com.wly.looklookdemo.R;
 import com.wly.looklookdemo.api.ApiHandler;
 import com.wly.looklookdemo.api.LookAppApiClient;
@@ -30,7 +32,7 @@ import java.util.List;
 /**
  * Created by Candy on 2016/9/2.
  */
-public class ZhihuFragment extends BaseFragment implements XRecyclerView.LoadingListener{
+public class ZhihuFragment extends BaseFragment implements XRecyclerView.LoadingListener {
 
     public static final String TAG = ZhihuFragment.class.getSimpleName();
 
@@ -44,23 +46,25 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
 
     public ViewStub viewStub;
 
+    public Button reload;
+
     public int date;
 
     public List<NewsBean> newsItems = new ArrayList<NewsBean>();
 
-    public Handler mHandler = new Handler(){
+    public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
             List<NewsBean> items = (ArrayList<NewsBean>) msg.obj;
-            switch (msg.arg1){
+            switch (msg.arg1) {
                 case 0:
                     newsItems.clear();
                     newsItems.addAll(items);
                     break;
                 case 1:
-                    newsItems.addAll(0 , items);
+                    newsItems.addAll(0, items);
                     newsRecycler.reset();
                     break;
                 case 2:
@@ -71,7 +75,6 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
             adapter.notifyDataSetChanged();
         }
     };
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_zhihu;
@@ -84,17 +87,17 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
         viewStub = (ViewStub) convertView.findViewById(R.id.viewsub);
     }
 
-    public void initRecycler(){
+    public void initRecycler() {
 
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         newsRecycler.setLayoutManager(manager);
         newsRecycler.setRefreshProgressStyle(ProgressStyle.BallBeat);
         newsRecycler.setLoadingMoreProgressStyle(ProgressStyle.BallBeat);
-        newsRecycler.setArrowImageView(R.mipmap.iconfont_downgrey);
         newsRecycler.setItemAnimator(new DefaultItemAnimator());
-        adapter = new NewsListAdapter(mContext , newsItems);
-        newsRecycler.setAdapter(adapter);
+        adapter = new NewsListAdapter(mContext, newsItems);
+        SlideInBottomAnimatorAdapter animatorAdapter = new SlideInBottomAnimatorAdapter(adapter , newsRecycler);
+        newsRecycler.setAdapter(animatorAdapter);
         newsRecycler.setLoadingListener(this);
         newsRecycler.setRefreshing(true);
     }
@@ -107,16 +110,16 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
     @Override
     protected void initialize() {
 
-        if(viewStub == null){
+        if (viewStub == null) {
             viewStub.inflate();
         }
-        if(NetWorkCheckUtil.isNetWorkConnected(getContext())){
+        if (NetWorkCheckUtil.isNetWorkConnected(getContext())) {
             viewStub.setVisibility(View.GONE);
             newsRecycler.setVisibility(View.VISIBLE);
             initRecycler();
-        }else{
+            onRefresh();
+        } else {
             viewStub.setVisibility(View.VISIBLE);
-            Button reload = (Button) convertView.findViewById(R.id.reload);
             reload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -126,7 +129,7 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
         }
     }
 
-    public void initData(String url , final int upOrDown){
+    public void initData(String url, final int upOrDown) {
         LookAppApiClient.sendRequest(false, mContext, url, new ApiHandler() {
             @Override
             public void onSuccess(String jsonResult) {
@@ -154,14 +157,14 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
     @Override
     public void onRefresh() {
         url = Urls.LATEST;
-        initData(url , 0);
+        initData(url, 0);
         newsRecycler.refreshComplete();
     }
 
     @Override
     public void onLoadMore() {
         url = Urls.BEFORE + date;
-        initData(url , 2);
+        initData(url, 2);
         newsRecycler.loadMoreComplete();
     }
 }

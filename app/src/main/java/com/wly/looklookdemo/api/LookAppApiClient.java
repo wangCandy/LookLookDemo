@@ -1,5 +1,6 @@
 package com.wly.looklookdemo.api;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -20,6 +21,7 @@ public class LookAppApiClient {
     public static void sendRequest(boolean isShowProgress , Context context , final String url , final ApiHandler handler){
 
         if(isShowProgress){
+
 
         }
         if(!NetWorkCheckUtil.isNetWorkConnected(context)){
