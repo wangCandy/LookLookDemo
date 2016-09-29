@@ -1,6 +1,7 @@
 package com.wly.looklookdemo.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -8,7 +9,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.wly.looklookdemo.R;
 import com.wly.looklookdemo.fragment.LookFragment;
@@ -17,6 +20,7 @@ import com.wly.looklookdemo.fragment.ZhihuFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -27,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+
+    @Bind(R.id.fab)
+    public FloatingActionButton fab;
 
     private FragmentManager manager;
 
@@ -47,6 +54,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
         manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.main_contain , new NewsFragment()).commitAllowingStateLoss();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: ");
+                mDrawerLayout.scrollTo(0 , 0);
+            }
+        });
+    }
+
+    private boolean isInitializeFAB = false;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!isInitializeFAB) {
+            isInitializeFAB = true;
+            fab.setVisibility(View.GONE);
+        }
     }
 
     @Override

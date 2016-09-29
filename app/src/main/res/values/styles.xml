@@ -35,4 +35,16 @@
         <item name="android:scaleType">centerCrop</item>
     </style>
 
+    <!-- loading dialog style -->
+    <style name="myDialog_loading" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/loading_dialog_bg</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@null</item>
+        <!--全透明false-->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
 </resources>

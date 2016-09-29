@@ -172,7 +172,7 @@ public class NewsPagerFragment extends BaseFragment implements XRecyclerView.Loa
     public void initData(final String urlId , int id , final int upOrDown){
 
         final String url = Urls.NEWS_DETAIL + urlId + "/" + id + Urls.END_URL;
-        LookAppApiClient.sendRequest(false, mContext,url , new ApiHandler() {
+        LookAppApiClient.sendRequest(true, mContext,url , new ApiHandler() {
             @Override
             public void onSuccess(String jsonResult) {
                 Log.d(TAG, "onCompleted: result=" + jsonResult.toString());
@@ -195,7 +195,7 @@ public class NewsPagerFragment extends BaseFragment implements XRecyclerView.Loa
             }
 
             @Override
-            public void onFailure(String errorMsg) {
+            public void onFailure(String errorMsg, String errorCode) {
 
             }
         });

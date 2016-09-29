@@ -120,7 +120,7 @@ public class LookFragment extends BaseFragment implements XRecyclerView.LoadingL
     public void loadImageList(int id , final int upOrDown){
 
         final List<ImageBean> items = new ArrayList<ImageBean>();
-        LookAppApiClient.sendRequest(false, mContext, Urls.IMAGE_BASE + id, new ApiHandler() {
+        LookAppApiClient.sendRequest(true, mContext, Urls.IMAGE_BASE + id, new ApiHandler() {
             @Override
             public void onSuccess(String jsonResult) {
                 try {
@@ -141,9 +141,10 @@ public class LookFragment extends BaseFragment implements XRecyclerView.LoadingL
             }
 
             @Override
-            public void onFailure(String errorMsg) {
+            public void onFailure(String errorMsg, String errorCode) {
 
             }
+
         });
     }
 

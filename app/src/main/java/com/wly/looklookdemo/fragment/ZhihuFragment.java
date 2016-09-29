@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jcodecraeer.xrecyclerview.adapter.SlideInBottomAnimatorAdapter;
 import com.jcodecraeer.xrecyclerview.adapter.SlideInLeftAnimatorAdapter;
 import com.wly.looklookdemo.R;
+import com.wly.looklookdemo.activities.MainActivity;
 import com.wly.looklookdemo.api.ApiHandler;
 import com.wly.looklookdemo.api.LookAppApiClient;
 import com.wly.looklookdemo.base.BaseFragment;
@@ -120,9 +122,11 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
             onRefresh();
         } else {
             viewStub.setVisibility(View.VISIBLE);
+            reload = (Button) convertView.findViewById(R.id.reload);
             reload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d(TAG, "onClick: ");
                     initialize();
                 }
             });
@@ -130,7 +134,7 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
     }
 
     public void initData(String url, final int upOrDown) {
-        LookAppApiClient.sendRequest(false, mContext, url, new ApiHandler() {
+        LookAppApiClient.sendRequest(true, mContext, url, new ApiHandler() {
             @Override
             public void onSuccess(String jsonResult) {
 
@@ -148,8 +152,9 @@ public class ZhihuFragment extends BaseFragment implements XRecyclerView.Loading
             }
 
             @Override
-            public void onFailure(String errorMsg) {
-
+            public void onFailure(String errorMsg, String errorCode) {
+                viewStub.setVisibility(View.VISIBLE);
+                newsRecycler.setVisibility(View.GONE);
             }
         });
     }

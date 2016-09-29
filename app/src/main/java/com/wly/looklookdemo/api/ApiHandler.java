@@ -7,5 +7,5 @@ public interface ApiHandler {
 
     void onSuccess(String jsonResult);
 
-    void onFailure(String errorMsg);
+    void onFailure(String errorMsg , String errorCode);
 }
